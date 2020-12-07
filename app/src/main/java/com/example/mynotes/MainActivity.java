@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
 
     private boolean isUpdate = false;
+    private Note updatedNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle UserData = getIntent().getExtras();
         if(UserData != null){
             isUpdate = UserData.getBoolean("ISUPDATE");
-            Note updatedNote = (Note) UserData.getSerializable("NOTE");
+             updatedNote = (Note) UserData.getSerializable("NOTE");
 
             if(isUpdate && updatedNote != null){
                 ArrayList<Items> updatedItems = Items.covertJSONArrayStringToArrayList(updatedNote.noteItems);
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         if(!isUpdate){
             dbHelper.insertDataToDatabase(dbHelper.getWritableDatabase(), newNote);
         }else {
+            newNote.id = updatedNote.id;
             dbHelper.updatedItemsInDatabase(dbHelper.getWritableDatabase(), newNote);
         }
         setResult(Activity.RESULT_OK);
